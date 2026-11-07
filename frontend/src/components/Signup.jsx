@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Link , useNavigate} from 'react-router-dom';
-import axios  from "axios";
+import { Link, useNavigate } from 'react-router-dom';
+import axios from "axios";
 import toast from 'react-hot-toast';
 const Signup = () => {
     const [user, setUser] = useState({
@@ -14,30 +14,37 @@ const Signup = () => {
     const handleCheckbox = (gender) => {
         setUser({ ...user, gender })
     }
-    const onSubmitHandler = async(e) => {
+    const onSubmitHandler = async (e) => {
         e.preventDefault();
-        try{
-            const res = await axios.post(`http://localhost:8080/api/v1/user/register`, user,{
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                withCredentials:true
-            });
-            if(res.data.success){
+        try {
+            const BACKEND_URL =
+                process.env.REACT_APP_API_URL || "http://localhost:8080";
+
+            const res = await axios.post(
+                `${BACKEND_URL}/api/v1/user/register`,
+                user,
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    withCredentials: true
+                }
+            );
+            if (res.data.success) {
                 navigate("/login");
                 toast.success(res.data.message);
 
             }
-        }catch(error){
+        } catch (error) {
             console.log(error)
         }
         console.log(user);
         setUser({
-             fullName: "",
-        userName: "",
-        password: "",
-        confirmPassword: "",
-        gender: '',
+            fullName: "",
+            userName: "",
+            password: "",
+            confirmPassword: "",
+            gender: '',
         })
     }
     return (
@@ -94,16 +101,16 @@ const Signup = () => {
                             <div className='flex items-center'>
                                 <p>Male</p>
                                 <input type="checkbox"
-                                checked={user.gender === "male"}
-                                onChange={()=>handleCheckbox("male")}
+                                    checked={user.gender === "male"}
+                                    onChange={() => handleCheckbox("male")}
                                     defaultChecked
                                     className="checkbox checkbox-neutral mx-3" />
                             </div>
                             <div className='flex items-center'>
                                 <p>Female</p>
                                 <input type="checkbox"
-                                checked={user.gender === "female"}
-                                onChange={()=>handleCheckbox("female")}
+                                    checked={user.gender === "female"}
+                                    onChange={() => handleCheckbox("female")}
                                     defaultChecked
                                     className="checkbox checkbox-neutral mx-3" />
                             </div>

@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setAuthUser } from './redux/userSlice';
+import { login } from '../../../backend/controllers/userController';
 const Login = () => {
     const [user, setUser] = useState({
         userName: "",
@@ -15,12 +16,19 @@ const Login = () => {
     const onSubmitHandler = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post(`http://localhost:8080/api/v1/user/login`, user, {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                withCredentials: true
-            });
+          const BACKEND_URL =
+    process.env.REACT_APP_API_URL || "http://localhost:8080";
+
+const res = await axios.post(
+    `${BACKEND_URL}/api/v1/user/login`,
+    user,
+    {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true
+    }
+);
             console.log("LOGIN RESPONSE:", res.data);
 
             if (res.data.success) {

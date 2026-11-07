@@ -9,16 +9,23 @@ const SendInput = () => {
     const [message, setMessage] = useState("");
     const dispatch = useDispatch();
     const { selectedUser } = useSelector(store => store.user);
-    const {messages} = useSelector(store=>store.message);
+    const { messages } = useSelector(store => store.message);
     const onSubmitHandler = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post(`http://localhost:8080/api/v1/message/send/${selectedUser?._id}`, {message}, {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                withCredentials: true
-            });
+            const BACKEND_URL =
+                process.env.REACT_APP_API_URL || "http://localhost:8080";
+
+            const res = await axios.post(
+                `${BACKEND_URL}/api/v1/message/send/${selectedUser?._id}`,
+                { message },
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    withCredentials: true
+                }
+            );
             console.log(res);
             dispatch(setMessages([...(messages || []), res.data.newMessage]))
         } catch (error) {

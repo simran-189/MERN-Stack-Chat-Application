@@ -5,21 +5,29 @@ import { setMessages } from "../components/redux/messageSlice";
 
 
 const useGetMessages = () => {
-    const {selectedUser} = useSelector(store=>store.user);
-    const dispatch =useDispatch();
+    const { selectedUser } = useSelector(store => store.user);
+    const dispatch = useDispatch();
     useEffect(() => {
         const fetchMessages = async () => {
             try {
                 axios.defaults.withCredentials = true;
-                const res = await axios.get(`http://localhost:8080/api/v1/message/${selectedUser?._id}`)
+
+                const BACKEND_URL =
+                    process.env.REACT_APP_API_URL || "http://localhost:8080";
+
+                const res = await axios.get(
+                    `${BACKEND_URL}/api/v1/message/${selectedUser?._id}`
+                );
+
                 console.log(res);
-                dispatch(setMessages(res.data))
+
+                dispatch(setMessages(res.data));
             } catch (error) {
                 console.log(error);
             }
         }
         fetchMessages();
-    }, [selectedUser,dispatch])
+    }, [selectedUser, dispatch])
 
 }
 export default useGetMessages;
