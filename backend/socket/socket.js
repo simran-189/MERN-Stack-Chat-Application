@@ -8,7 +8,7 @@ const server = http.createServer(app);
 
 const allowedOrigins = [
     "http://localhost:3000",
-    process.env.CLIENT_URL
+    process.env.REACT_APP_API_URL
 ].filter(Boolean);
 
 const io = new Server(server, {
