@@ -16,11 +16,17 @@ const PORT = process.env.PORT || 8080;
 //middleware
 app.use(express.json({extended:true}))
 app.use(cookieParser());
-const corsOption ={
-    origin:'http://localhost:3000',
-    credentials:true
+const allowedOrigins = [
+    "http://localhost:3000",
+    process.env.CLIENT_URL
+].filter(Boolean);
+
+const corsOption = {
+    origin: allowedOrigins,
+    credentials: true
 };
-app.use(cors(corsOption))
+
+app.use(cors(corsOption));
 //routes
 app.use("/api/v1/user",userRoutes);
 app.use("/api/v1/message",messageRoutes);

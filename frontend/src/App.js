@@ -31,39 +31,42 @@ function App() {
   const dispatch = useDispatch();
 
 
-  
-useEffect(() => {
+
+  useEffect(() => {
     if (!authUser) {
-        dispatch(setSocket(null));
-        return;
+      dispatch(setSocket(null));
+      return;
     }
 
-    const newSocket = io("http://localhost:8080", {
-        withCredentials: true,
-        query: {
-            userId: authUser._id
-        }
+    const BACKEND_URL =
+      process.env.REACT_APP_API_URL || "http://localhost:8080";
+
+    const newSocket = io(BACKEND_URL, {
+      withCredentials: true,
+      query: {
+        userId: authUser._id
+      }
     });
 
     newSocket.on("connect", () => {
-        console.log("SOCKET CONNECTED:", newSocket.id);
+      console.log("SOCKET CONNECTED:", newSocket.id);
     });
 
     newSocket.on("connect_error", (error) => {
-        console.log("SOCKET ERROR:", error.message);
+      console.log("SOCKET ERROR:", error.message);
     });
 
     newSocket.on("getOnlineUsers", (onlineUsers) => {
-        dispatch(setOnlineUsers(onlineUsers));
+      dispatch(setOnlineUsers(onlineUsers));
     });
 
     dispatch(setSocket(newSocket));
 
     return () => {
-        newSocket.close();
-        dispatch(setSocket(null));
+      newSocket.close();
+      dispatch(setSocket(null));
     };
-}, [authUser, dispatch]);
+  }, [authUser, dispatch]);
 
   return (
     <div className="p-4 h-screen flex items-center justify-center">
