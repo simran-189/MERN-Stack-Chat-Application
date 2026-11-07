@@ -18,7 +18,7 @@ app.use(express.json({extended:true}))
 app.use(cookieParser());
 const allowedOrigins = [
     "http://localhost:3000",
-    process.env.CLIENT_URL
+    process.env.REACT_APP_API_URL
 ].filter(Boolean);
 
 const corsOption = {
